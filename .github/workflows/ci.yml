@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: ${{ matrix.command }} ${{ matrix.java }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['adopt@1.8', 'adopt@1.11']
+        command:
+          - "++3.0.2 test"
+    steps:
+      - uses: actions/checkout@v2.3.4
+
+      - uses: olafurpg/setup-scala@v13
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Cache coursier
+        uses: coursier/cache-action@v6.3
+
+      - run: sbt ${{ matrix.command }}
