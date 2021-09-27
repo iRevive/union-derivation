@@ -15,7 +15,7 @@ class UnionDerivationSuite extends munit.FunSuite {
     def magic(a: A): Int
   }
 
-  given Typeclass[Int] = _ => 42
+  given Typeclass[Int]    = _ => 42
   given Typeclass[String] = _ => 22
 
   inline def deriveUnion[F[_], A]: F[A] = UnionDerivation.derive[F, A]
