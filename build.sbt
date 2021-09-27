@@ -1,6 +1,7 @@
 lazy val `union-derivation` = project
   .in(file("."))
   .settings(commonSettings)
+  .settings(noPublishSettings)
   .aggregate(core, examples)
 
 lazy val core = project
