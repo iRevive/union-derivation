@@ -24,9 +24,9 @@ lazy val commonSettings = Seq(
   scalaVersion := "3.0.2",
   scalacOptions ++= Seq(
     "-source:future",
-    "-language:adhocExtensions",
     "-no-indent", // let's be conservative for a while
-    "-old-syntax"
+    "-old-syntax",
+    "-Yretain-trees"
   )
 )
 

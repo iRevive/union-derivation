@@ -5,7 +5,7 @@ object Main {
     val show: Show[UnionType] = Show.deriveUnion[UnionType]
 
     println(show.show(1))
-    println(show.show(2))
+    println(show.show(2L))
     println(show.show("3"))
   }
 }
