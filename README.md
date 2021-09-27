@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/iRevive/union-derivation/workflows/CI/badge.svg)](https://github.com/iRevive/union-derivation/actions)
 [![Maven Version](https://maven-badges.herokuapp.com/maven-central/io.github.irevive/union-derivation-core_3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.irevive/union-derivation-core_3)
 
-A micro library to derive a typeclass for Scala 3 [Union types](https://dotty.epfl.ch/docs/reference/new-types/union-types.html).
+A micro-library to derive a typeclass for Scala 3 [Union types](https://dotty.epfl.ch/docs/reference/new-types/union-types.html).
 
 ## Quick start
 
