@@ -11,7 +11,7 @@ object UnionDerivation {
     m.deriveImpl
   }
 
-  class Macro[F[_]: Type](using quotes: Quotes) {
+  private class Macro[F[_]: Type](using quotes: Quotes) {
     import quotes.reflect.*
 
     def deriveImpl[A: Type]: Expr[F[A]] = {
