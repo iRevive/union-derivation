@@ -10,7 +10,7 @@ A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.sca
 To use `union-derivation` in an existing SBT project with Scala **3** or a later version, add the following configuration to your `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.2"
+libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "@VERSION@"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
@@ -18,7 +18,7 @@ scalacOptions += "-Yretain-trees" // important for the detection of an abstract 
 
 ### Typeclass definition
 
-```scala
+```scala mdoc:silent
 import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
 
 import scala.compiletime.{erasedValue, summonInline}
@@ -81,25 +81,18 @@ trait ShowLowPriority {
 
 ### Usage
 
-```scala
+```scala mdoc
 type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$App$$Lambda$54373/0x000000084a7a2440@48ff6c1f
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@2b08cb74
 
 println(unionShow.show(1))
-// Int(1)
 println(unionShow.show(2L))
-// Long(2)
 println(unionShow.show("3"))
-// String(3)
 println(userShow.show(User("Pablo", 22, 12L)))
-// User(name = String(Pablo), age = Long(22), flags = Long(12))
 println(userShow.show(User("Pablo", 33, 1)))
-// User(name = String(Pablo), age = Long(33), flags = Int(1))
 ```
 
 ## Generated code
