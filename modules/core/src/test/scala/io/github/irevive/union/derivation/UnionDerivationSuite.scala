@@ -1,7 +1,5 @@
 package io.github.irevive.union.derivation
 
-import scala.quoted.Quotes
-
 class UnionDerivationSuite extends munit.FunSuite {
 
   trait SimpleTrait[A]
