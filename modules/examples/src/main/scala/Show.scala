@@ -1,8 +1,7 @@
-import io.github.irevive.union.derivation.IsUnion
-import io.github.irevive.union.derivation.UnionDerivation
+import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
 
-import scala.deriving.*
 import scala.compiletime.{erasedValue, summonInline}
+import scala.deriving.*
 
 trait Show[A] {
   def show(a: A): String

@@ -21,6 +21,21 @@ lazy val examples = project
   )
   .dependsOn(core)
 
+lazy val docs = project
+  .in(file("modules/docs"))
+  .enablePlugins(MdocPlugin, DocusaurusPlugin)
+  .settings(commonSettings)
+  .settings(noPublishSettings)
+  .settings(
+    name                := "union-derivation-docs",
+    mdocIn := baseDirectory.value / "src" / "main" / "mdoc" / "index.md",
+    mdocOut := file("README.md"),
+    mdocVariables := Map(
+      "VERSION" -> version.value.replaceFirst("\\+.*", "")
+    )
+  )
+  .dependsOn(core)
+
 lazy val commonSettings = Seq(
   scalaVersion := "3.0.2",
   scalacOptions ++= Seq(
