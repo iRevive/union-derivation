@@ -6,7 +6,7 @@ object Main {
     type UnionType = Int | Long | String
 
     val show: Show[UnionType] = summon[Show[UnionType]]
-    val userShow: Show[User] = summon[Show[User]]
+    val userShow: Show[User]  = summon[Show[User]]
 
     println(show.show(1))
     println(show.show(2L))

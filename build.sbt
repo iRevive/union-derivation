@@ -27,8 +27,8 @@ lazy val docs = project
   .settings(commonSettings)
   .settings(noPublishSettings)
   .settings(
-    name                := "union-derivation-docs",
-    mdocIn := baseDirectory.value / "src" / "main" / "mdoc" / "index.md",
+    name    := "union-derivation-docs",
+    mdocIn  := baseDirectory.value / "src" / "main" / "mdoc" / "index.md",
     mdocOut := file("README.md"),
     mdocVariables := Map(
       "VERSION" -> version.value.replaceFirst("\\+.*", "")

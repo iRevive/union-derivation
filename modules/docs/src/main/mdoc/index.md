@@ -37,7 +37,7 @@ object Show extends ShowLowPriority {
   inline given derived[A](using m: Mirror.Of[A]): Show[A] = { // (1)
     val elemInstances = summonAll[m.MirroredElemTypes]
     inline m match {
-      case s: Mirror.SumOf[A] => showSum(s, elemInstances)
+      case s: Mirror.SumOf[A]     => showSum(s, elemInstances)
       case p: Mirror.ProductOf[A] => showProduct(p, elemInstances)
     }
   }
@@ -45,7 +45,7 @@ object Show extends ShowLowPriority {
   inline def summonAll[A <: Tuple]: List[Show[?]] =
     inline erasedValue[A] match {
       case _: EmptyTuple => Nil
-      case _: (t *: ts) => summonInline[Show[t]] :: summonAll[ts]
+      case _: (t *: ts)  => summonInline[Show[t]] :: summonAll[ts]
     }
 
   private def showA[A](a: A, show: Show[?]): String = 
@@ -61,7 +61,9 @@ object Show extends ShowLowPriority {
       def show(a: A): String = {
         val product = a.asInstanceOf[Product]
 
-        product.productIterator.zip(product.productElementNames).zip(elems.iterator)
+        product.productIterator
+          .zip(product.productElementNames)
+          .zip(elems.iterator)
           .map { case ((field, name), show) => s"$name = ${showA[Any](field, show)}" }
           .mkString(product.productPrefix + "(", ", ", ")")
       }

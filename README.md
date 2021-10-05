@@ -10,7 +10,7 @@ A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.sca
 To use `union-derivation` in an existing SBT project with Scala **3** or a later version, add the following configuration to your `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.1"
+libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.2"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
@@ -37,7 +37,7 @@ object Show extends ShowLowPriority {
   inline given derived[A](using m: Mirror.Of[A]): Show[A] = { // (1)
     val elemInstances = summonAll[m.MirroredElemTypes]
     inline m match {
-      case s: Mirror.SumOf[A] => showSum(s, elemInstances)
+      case s: Mirror.SumOf[A]     => showSum(s, elemInstances)
       case p: Mirror.ProductOf[A] => showProduct(p, elemInstances)
     }
   }
@@ -45,7 +45,7 @@ object Show extends ShowLowPriority {
   inline def summonAll[A <: Tuple]: List[Show[?]] =
     inline erasedValue[A] match {
       case _: EmptyTuple => Nil
-      case _: (t *: ts) => summonInline[Show[t]] :: summonAll[ts]
+      case _: (t *: ts)  => summonInline[Show[t]] :: summonAll[ts]
     }
 
   private def showA[A](a: A, show: Show[?]): String = 
@@ -61,7 +61,9 @@ object Show extends ShowLowPriority {
       def show(a: A): String = {
         val product = a.asInstanceOf[Product]
 
-        product.productIterator.zip(product.productElementNames).zip(elems.iterator)
+        product.productIterator
+          .zip(product.productElementNames)
+          .zip(elems.iterator)
           .map { case ((field, name), show) => s"$name = ${showA[Any](field, show)}" }
           .mkString(product.productPrefix + "(", ", ", ")")
       }
@@ -84,9 +86,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$App$$Lambda$48694/0x0000000849f68040@1a4cd5ba
+// unionShow: Show[UnionType] = repl.MdocSession$App$$Lambda$54373/0x000000084a7a2440@48ff6c1f
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@3fea9147
+// userShow: Show[User] = repl.MdocSession$$anon$9@2b08cb74
 
 println(unionShow.show(1))
 // Int(1)
