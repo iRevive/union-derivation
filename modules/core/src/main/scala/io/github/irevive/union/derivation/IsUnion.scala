@@ -17,7 +17,7 @@ object IsUnion {
     val tpe: TypeRepr = TypeRepr.of[A]
     tpe.dealias match {
       case o: OrType => ('{ IsUnion.singleton.asInstanceOf[IsUnion[A]] }).asExprOf[IsUnion[A]]
-      case other     => report.throwError(s"${tpe.show} is not a Union")
+      case other     => report.errorAndAbort(s"${tpe.show} is not a Union")
     }
   }
 

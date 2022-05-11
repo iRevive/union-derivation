@@ -35,7 +35,7 @@ object UnionDerivation {
           instanceTree.asExprOf[F[A]]
 
         case other =>
-          report.throwError(s"Cannot derive a typeclass for the ${tpe.show}. Only Union type is supported")
+          report.errorAndAbort(s"Cannot derive a typeclass for the ${tpe.show}. Only Union type is supported")
       }
     }
 
@@ -51,7 +51,7 @@ object UnionDerivation {
 
       methods match {
         case Nil =>
-          report.throwError(
+          report.errorAndAbort(
             s"""Cannot detect an abstract method in ${tcl.typeSymbol}. `scalacOptions += "-Yretain-trees"` may solve the issue"""
           )
 
@@ -59,7 +59,7 @@ object UnionDerivation {
           head
 
         case other =>
-          report.throwError(
+          report.errorAndAbort(
             s"More than one abstract method detected in ${tcl.typeSymbol}: ${other.map(_.name).mkString(", ")}. Automatic derivation is impossible"
           )
       }
@@ -127,7 +127,7 @@ object UnionDerivation {
       val tclTpe       = typeclassTpe.appliedTo(t)
       Implicits.search(tclTpe) match {
         case success: ImplicitSearchSuccess => success.tree
-        case failure: ImplicitSearchFailure => report.throwError(failure.explanation)
+        case failure: ImplicitSearchFailure => report.errorAndAbort(failure.explanation)
       }
     }
 

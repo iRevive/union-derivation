@@ -37,7 +37,7 @@ lazy val docs = project
   .dependsOn(core)
 
 lazy val commonSettings = Seq(
-  scalaVersion := "3.0.2",
+  scalaVersion := "3.1.2",
   scalacOptions ++= Seq(
     "-source:future",
     "-no-indent", // let's be conservative for a while
@@ -57,7 +57,7 @@ inThisBuild(
   Seq(
     organization := "io.github.irevive",
     homepage     := Some(url("https://github.com/iRevive/union-derivation")),
-    licenses     := List("MIT" -> url("http://opensource.org/licenses/MIT")),
+    licenses     := List("MIT" -> url("https://opensource.org/licenses/MIT")),
     developers   := List(Developer("iRevive", "Maksim Ochenashko", "", url("https://github.com/iRevive")))
   )
 )
