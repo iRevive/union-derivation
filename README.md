@@ -7,10 +7,10 @@ A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.sca
 
 ## Getting started
 
-To use `union-derivation` in an existing SBT project with Scala **3** or a later version, add the following configuration to your `build.sbt`:
+To use `union-derivation` in an existing SBT project with Scala **3.1.2**, add the following configuration to your `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.2"
+libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.3"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
