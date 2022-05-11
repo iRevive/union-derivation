@@ -17,15 +17,15 @@ jobs:
       matrix:
         java: ['adopt@1.8', 'adopt@1.11']
         command:
-          - "++3.0.2 test"
+          - "++3.1.2 test"
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3
 
       - uses: olafurpg/setup-scala@v13
         with:
           java-version: ${{ matrix.java }}
 
       - name: Cache coursier
-        uses: coursier/cache-action@v6.3
+        uses: coursier/cache-action@v6
 
       - run: sbt ${{ matrix.command }}
