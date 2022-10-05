@@ -37,7 +37,7 @@ lazy val docs = project
   .dependsOn(core)
 
 lazy val commonSettings = Seq(
-  scalaVersion := "3.1.3",
+  scalaVersion := "3.2.0",
   scalacOptions ++= Seq(
     "-source:future",
     "-no-indent", // let's be conservative for a while
