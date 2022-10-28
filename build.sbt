@@ -24,9 +24,9 @@ lazy val `union-derivation` = project
   .in(file("."))
   .settings(commonSettings)
   .settings(noPublishSettings)
-  .aggregate(core.js, core.jvm, examples.js, examples.jvm)
+  .aggregate(core.jvm, core.native, examples.jvm, examples.native)
 
-lazy val core = crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("modules/core"))
   .settings(commonSettings)
@@ -35,7 +35,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies += "org.scalameta" %%% "munit" % "1.0.0-M6" % Test
   )
 
-lazy val examples = crossProject(JSPlatform, JVMPlatform)
+lazy val examples = crossProject(JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("modules/examples"))
   .settings(commonSettings)
