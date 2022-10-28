@@ -28,7 +28,7 @@ lazy val `union-derivation` = project
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
-  .in(file("modules/core"))
+  .in(file("modules/core"))     ''
   .settings(commonSettings)
   .settings(
     name                := "union-derivation-core",
