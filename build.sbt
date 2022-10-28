@@ -5,7 +5,7 @@ ThisBuild / githubWorkflowTargetTags           ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
-  WorkflowStep.Sbt(List("docs/mdoc"), name = Some("Generate a documentation"))
+  WorkflowStep.Sbt(List("docs/mdoc"), name = Some("Generate documentation"))
 )
 
 ThisBuild / githubWorkflowPublish := Seq(
