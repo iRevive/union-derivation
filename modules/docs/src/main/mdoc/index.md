@@ -1,7 +1,7 @@
 # union-derivation
 
 [![Build Status](https://github.com/iRevive/union-derivation/workflows/CI/badge.svg)](https://github.com/iRevive/union-derivation/actions)
-[![Maven Version](https://maven-badges.herokuapp.com/maven-central/io.github.irevive/union-derivation-core_3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.irevive/union-derivation-core_3)
+[![union-derivation-core Scala version support](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core/latest-by-scala-version.svg)](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core)
 
 A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.scala-lang.org/scala3/reference/new-types/union-types.html).
 
@@ -13,6 +13,13 @@ To use `union-derivation` in an existing SBT project with Scala **3.1.2** or a l
 libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "@VERSION@"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
+
+Versions matrix:
+
+| Scala  | Library | JVM | Scala.JS | Scala Native |
+|--------|---------|-----|----------|--------------|
+| 3.1.2  | 0.0.3   | +   | -        | -            |
+| 3.2.0+ | 0.0.4+  | +   | +        | +            |
 
 ## Usage example
 
