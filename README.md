@@ -1,13 +1,13 @@
 # union-derivation
 
 [![Build Status](https://github.com/iRevive/union-derivation/workflows/CI/badge.svg)](https://github.com/iRevive/union-derivation/actions)
-[![union-derivation-core Scala version support](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core/latest-by-scala-version.svg)](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core)
+[![Maven Version](https://maven-badges.herokuapp.com/maven-central/io.github.irevive/union-derivation-core_3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.irevive/union-derivation-core_3)
 
 A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.scala-lang.org/scala3/reference/new-types/union-types.html).
 
 ## Getting started
 
-To use `union-derivation` in an existing SBT project with Scala **3.1.2**, add the following configuration to your `build.sbt`:
+To use `union-derivation` in an existing SBT project with Scala **3.1.2** or a later version, add the following configuration to your `build.sbt`:
 
 ```scala
 libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.3"
@@ -86,9 +86,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$App$$Lambda$54373/0x000000084a7a2440@48ff6c1f
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$25706/0x000000080526e840@2e967ae
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@2b08cb74
+// userShow: Show[User] = repl.MdocSession$$anon$9@2543bc45
 
 println(unionShow.show(1))
 // Int(1)
