@@ -57,6 +57,9 @@ jobs:
       - name: Build project
         run: sbt ++${{ matrix.scala }} test
 
+      - name: Generate a documentation
+        run: sbt ++${{ matrix.scala }} docs/mdoc
+
       - name: Compress target directories
         run: tar cf targets.tar target modules/core/target modules/examples/target modules/docs/target project/target
 
