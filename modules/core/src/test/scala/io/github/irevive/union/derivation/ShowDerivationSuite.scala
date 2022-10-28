@@ -46,7 +46,7 @@ class ShowDerivationSuite extends munit.FunSuite {
 
   test("fail derivation if an instance of a typeclass is missing for a case class member") {
     val expected =
-      "no implicit argument of type io.github.irevive.union.derivation.ShowDerivationSuite.Show[User] was found for parameter x of method summon in object Predef."
+      "no given instance of type io.github.irevive.union.derivation.ShowDerivationSuite.Show[User] was found for parameter x of method summon in object Predef."
 
     val code =
       """
