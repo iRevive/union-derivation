@@ -16,10 +16,10 @@ scalacOptions += "-Yretain-trees" // important for the detection of an abstract 
 
 Versions matrix:
 
-| Scala  | Library | JVM | Scala.JS | Scala Native |
-|--------|---------|-----|----------|--------------|
-| 3.1.2  | 0.0.3   | +   | -        | -            |
-| 3.2.0+ | 0.0.4+  | +   | +        | +            |
+| Scala  | Library | JVM | Scala Native | Scala.js |
+|:------:|:-------:|:---:|:------------:|:--------:|
+| 3.1.2  |  0.0.3  |  +  |      -       |    -     |
+| 3.2.0+ | 0.0.4+  |  +  |      +       |    -     |
 
 ## Usage example
 

@@ -16,10 +16,10 @@ scalacOptions += "-Yretain-trees" // important for the detection of an abstract 
 
 Versions matrix:
 
-| Scala  | Library  |  JVM  |  Scala.JS  |  Scala Native  |
-|:------:|:--------:|:-----:|:----------:|:--------------:|
-| 3.1.2  |  0.0.3   |   +   |     -      |       -        |
-| 3.2.0+ |  0.0.4+  |   +   |     +      |       +        |
+| Scala  | Library | JVM | Scala Native | Scala.js |
+|:------:|:-------:|:---:|:------------:|:--------:|
+| 3.1.2  |  0.0.3  |  +  |      -       |    -     |
+| 3.2.0+ | 0.0.4+  |  +  |      +       |    -     |
 
 ## Usage example
 
@@ -93,9 +93,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$16352/0x00000008036d6840@18f2336e
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$31501/0x0000000804acfc40@437f0e35
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@2b59f5a9
+// userShow: Show[User] = repl.MdocSession$$anon$9@a92645d
 
 println(unionShow.show(1))
 // Int(1)

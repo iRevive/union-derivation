@@ -24,17 +24,19 @@ lazy val `union-derivation` = project
   .in(file("."))
   .settings(commonSettings)
   .settings(noPublishSettings)
-  .aggregate(core, examples)
+  .aggregate(core.jvm, core.native, examples.jvm, examples.native)
 
-lazy val core = project
+lazy val core = crossProject(JVMPlatform, NativePlatform)
+  .crossType(CrossType.Pure)
   .in(file("modules/core"))
   .settings(commonSettings)
   .settings(
     name                := "union-derivation-core",
-    libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
+    libraryDependencies += "org.scalameta" %%% "munit" % "1.0.0-M6" % Test
   )
 
-lazy val examples = project
+lazy val examples = crossProject(JVMPlatform, NativePlatform)
+  .crossType(CrossType.Pure)
   .in(file("modules/examples"))
   .settings(commonSettings)
   .settings(noPublishSettings)
@@ -56,7 +58,7 @@ lazy val docs = project
       "VERSION" -> version.value.replaceFirst("\\+.*", "")
     )
   )
-  .dependsOn(core)
+  .dependsOn(core.jvm)
 
 lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
