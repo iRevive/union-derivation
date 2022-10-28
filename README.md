@@ -1,6 +1,6 @@
 # union-derivation
 
-[![Build Status](https://github.com/iRevive/union-derivation/workflows/CI/badge.svg)](https://github.com/iRevive/union-derivation/actions)
+[![Continuous Integration](https://github.com/iRevive/union-derivation/actions/workflows/ci.yml/badge.svg)](https://github.com/iRevive/union-derivation/actions/workflows/ci.yml)
 [![union-derivation-core Scala version support](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core/latest-by-scala-version.svg)](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core)
 
 A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.scala-lang.org/scala3/reference/new-types/union-types.html).
@@ -93,9 +93,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$31501/0x0000000804acfc40@437f0e35
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$41199/0x0000000805e95c40@232fd3b8
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@a92645d
+// userShow: Show[User] = repl.MdocSession$$anon$9@1b723676
 
 println(unionShow.show(1))
 // Int(1)
@@ -124,4 +124,30 @@ val instance: Show[Int | String | Long] = { (value: Int | String | Long) =>
   else if (value.isInstanceOf[Long]) summon[Show[Long]].show(value)
   else sys.error("Impossible")
 }
+```
+
+## scala-cli
+
+The library works out of the box with [scala-cli](https://scala-cli.virtuslab.org/) too.
+
+```scala
+//> using scala "3.2.0"
+//> using lib "io.github.irevive::union-derivation-core:0.0.3"
+//> using options "-Yretain-trees"
+
+import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
+
+trait Show[A] {
+  def show(value: A): String
+}
+
+given Show[String] = value => s"str: $value"
+given Show[Int]    = value => s"int: $value"
+
+inline given derivedUnion[A](using IsUnion[A]): Show[A] = UnionDerivation.derive[Show, A]
+
+println(summon[Show[String | Int]].show(1))
+// int: 1
+println(summon[Show[String | Int]].show("1"))
+// str: 1
 ```
