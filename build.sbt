@@ -1,8 +1,8 @@
 ThisBuild / scalaVersion := "3.1.3"
 
-ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
-ThisBuild / githubWorkflowPublishTargetBranches :=
-  Seq(RefPredicate.StartsWith(Ref.Tag("v")))
+ThisBuild / githubWorkflowTargetBranches        := Seq("main")
+ThisBuild / githubWorkflowTargetTags           ++= Seq("v*")
+ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
   WorkflowStep.Sbt(List("docs/mdoc"), name = Some("Generate a documentation"))
