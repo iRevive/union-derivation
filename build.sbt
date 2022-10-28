@@ -1,3 +1,21 @@
+ThisBuild / scalaVersion := "3.1.3"
+
+ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowPublishTargetBranches :=
+  Seq(RefPredicate.StartsWith(Ref.Tag("v")))
+
+ThisBuild / githubWorkflowPublish := Seq(
+  WorkflowStep.Sbt(
+    List("ci-release"),
+    env = Map(
+      "PGP_PASSPHRASE"    -> "${{ secrets.PGP_PASSPHRASE }}",
+      "PGP_SECRET"        -> "${{ secrets.PGP_SECRET }}",
+      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+    )
+  )
+)
+
 lazy val `union-derivation` = project
   .in(file("."))
   .settings(commonSettings)
@@ -37,7 +55,6 @@ lazy val docs = project
   .dependsOn(core)
 
 lazy val commonSettings = Seq(
-  scalaVersion := "3.1.3",
   scalacOptions ++= Seq(
     "-source:future",
     "-no-indent", // let's be conservative for a while
@@ -57,7 +74,7 @@ inThisBuild(
   Seq(
     organization := "io.github.irevive",
     homepage     := Some(url("https://github.com/iRevive/union-derivation")),
-    licenses     := List("MIT" -> url("https://opensource.org/licenses/MIT")),
-    developers   := List(Developer("iRevive", "Maksim Ochenashko", "", url("https://github.com/iRevive")))
+    licenses     := List(License.MIT),
+    developers   := List(Developer("iRevive", "Maksym Ochenashko", "", url("https://github.com/iRevive")))
   )
 )
