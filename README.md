@@ -1,7 +1,7 @@
 # union-derivation
 
 [![Build Status](https://github.com/iRevive/union-derivation/workflows/CI/badge.svg)](https://github.com/iRevive/union-derivation/actions)
-[![Maven Version](https://maven-badges.herokuapp.com/maven-central/io.github.irevive/union-derivation-core_3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.irevive/union-derivation-core_3)
+[![union-derivation-core Scala version support](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core/latest-by-scala-version.svg)](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core)
 
 A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.scala-lang.org/scala3/reference/new-types/union-types.html).
 
@@ -13,6 +13,13 @@ To use `union-derivation` in an existing SBT project with Scala **3.1.2** or a l
 libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.3"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
+
+Versions matrix:
+
+| Scala  | Library  |  JVM  |  Scala.JS  |  Scala Native  |
+|:------:|:--------:|:-----:|:----------:|:--------------:|
+| 3.1.2  |  0.0.3   |   +   |     -      |       -        |
+| 3.2.0+ |  0.0.4+  |   +   |     +      |       +        |
 
 ## Usage example
 
@@ -86,9 +93,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$25706/0x000000080526e840@2e967ae
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$16352/0x00000008036d6840@18f2336e
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@2543bc45
+// userShow: Show[User] = repl.MdocSession$$anon$9@2b59f5a9
 
 println(unionShow.show(1))
 // Int(1)
