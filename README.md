@@ -10,7 +10,7 @@ A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.sca
 To use `union-derivation` in an existing SBT project with Scala **3.1.2** or a later version, add the following configuration to your `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.3"
+libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.4"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
@@ -93,9 +93,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$41199/0x0000000805e95c40@232fd3b8
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$47702/0x0000000805a2fc40@31338355
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@1b723676
+// userShow: Show[User] = repl.MdocSession$$anon$9@440b9f25
 
 println(unionShow.show(1))
 // Int(1)
@@ -132,7 +132,7 @@ The library works out of the box with [scala-cli](https://scala-cli.virtuslab.or
 
 ```scala
 //> using scala "3.2.0"
-//> using lib "io.github.irevive::union-derivation-core:0.0.3"
+//> using lib "io.github.irevive::union-derivation-core:0.0.4"
 //> using options "-Yretain-trees"
 
 import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
