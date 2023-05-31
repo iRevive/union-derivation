@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.2.0"
+ThisBuild / scalaVersion := "3.3.0"
 
 ThisBuild / githubWorkflowTargetBranches        := Seq("main")
 ThisBuild / githubWorkflowTargetTags           ++= Seq("v*")
