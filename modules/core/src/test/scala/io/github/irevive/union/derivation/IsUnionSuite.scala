@@ -1,7 +1,5 @@
 package io.github.irevive.union.derivation
 
-import scala.quoted.Quotes
-
 class IsUnionSuite extends munit.FunSuite {
 
   test("derive IsUnion for a union type") {
