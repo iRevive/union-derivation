@@ -20,11 +20,11 @@ object UnionDerivation {
       tpe.dealias match {
         case o: OrType =>
           val abstractMethod = findAbstractMethod
-          val knownTypes     = collectTypes(o).map(_.typeSymbol)
+          val collectedTypes = collectTypes(o)
           val mt             = MethodType(List("a"))(_ => List(tpe), _ => abstractMethod.returnTpt.tpe)
 
           val lambda =
-            Lambda(Symbol.spliceOwner, mt, (meth, arg) => body(arg.head.asExprOf[A], knownTypes, abstractMethod.name))
+            Lambda(Symbol.spliceOwner, mt, (meth, arg) => body(arg.head.asExprOf[A], collectedTypes, abstractMethod.name))
 
           // transform lambda to an instance of the typeclass
           val instanceTree = lambda match {
@@ -87,14 +87,14 @@ object UnionDerivation {
       *   the output type of the method
       * @return
       */
-    private def body[A](t: Expr[A], knownTypes: List[Symbol], method: String): Term = {
+    private def body[A](t: Expr[A], knownTypes: List[TypeRepr], method: String): Term = {
       val selector: Term = t.asTerm
 
-      val ifBranches: List[(Term, Term)] = knownTypes.map { sym =>
-        val childTpe    = TypeIdent(sym)
-        val condition   = TypeApply(Select.unique(selector, "isInstanceOf"), childTpe :: Nil)
-        val tcl         = lookupImplicit(childTpe.tpe)
-        val castedValue = Select.unique(selector, "asInstanceOf").appliedToType(childTpe.tpe)
+      val ifBranches: List[(Term, Term)] = knownTypes.map { tpe =>
+        val identifier  = TypeIdent(tpe.typeSymbol)
+        val condition   = TypeApply(Select.unique(selector, "isInstanceOf"), identifier :: Nil)
+        val tcl         = lookupImplicit(tpe)
+        val castedValue = Select.unique(selector, "asInstanceOf").appliedToType(tpe)
 
         val action: Term = Apply(Select.unique(tcl, method), castedValue :: Nil)
 
