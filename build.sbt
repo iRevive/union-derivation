@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.2.0"
+ThisBuild / scalaVersion := "3.3.1"
 
 ThisBuild / githubWorkflowTargetBranches        := Seq("main")
 ThisBuild / githubWorkflowTargetTags           ++= Seq("v*")
@@ -29,9 +29,9 @@ lazy val `union-derivation` = project
   .in(file("."))
   .settings(commonSettings)
   .settings(noPublishSettings)
-  .aggregate(core.jvm, core.native, examples.jvm, examples.native)
+  .aggregate(core.jvm, core.native, core.js, examples.jvm, examples.native, examples.js)
 
-lazy val core = crossProject(JVMPlatform, NativePlatform)
+lazy val core = crossProject(JVMPlatform, NativePlatform, JSPlatform)
   .crossType(CrossType.Pure)
   .in(file("modules/core"))
   .settings(commonSettings)
@@ -40,7 +40,7 @@ lazy val core = crossProject(JVMPlatform, NativePlatform)
     libraryDependencies += "org.scalameta" %%% "munit" % "1.0.0-M10" % Test
   )
 
-lazy val examples = crossProject(JVMPlatform, NativePlatform)
+lazy val examples = crossProject(JVMPlatform, NativePlatform, JSPlatform)
   .crossType(CrossType.Pure)
   .in(file("modules/examples"))
   .settings(commonSettings)

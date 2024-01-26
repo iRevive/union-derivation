@@ -81,7 +81,7 @@ object ShowDerivationSuite {
         val elemInstances = summonAll[m.MirroredElemTypes]
         inline m match {
           case s: Mirror.SumOf[A]     => showSum(s, elemInstances)
-          case p: Mirror.ProductOf[A] => showProduct(p, elemInstances)
+          case _: Mirror.ProductOf[A] => showProduct(elemInstances)
         }
       }
 
@@ -99,7 +99,7 @@ object ShowDerivationSuite {
           def show(a: A): String = showA(a, elems(s.ordinal(a)))
         }
 
-      private def showProduct[A](p: Mirror.ProductOf[A], elems: List[Show[?]]): Show[A] =
+      private def showProduct[A](elems: List[Show[?]]): Show[A] =
         new Show[A] {
           def show(a: A): String = {
             val product = a.asInstanceOf[Product]
