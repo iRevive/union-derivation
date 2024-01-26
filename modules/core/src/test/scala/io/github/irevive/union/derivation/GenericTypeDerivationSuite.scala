@@ -16,7 +16,7 @@ class GenericTypeDerivationSuite extends munit.FunSuite {
     type UnionType = GenericType[Int]
     val unionTypeGiven: Typeclass[UnionType] = summon[Typeclass[UnionType]]
 
-    assertEquals(unionTypeGiven.magic(GenericType(42)), "42-complex")
+    assertEquals(unionTypeGiven.magic(GenericType(42)), "42-generic")
 
   }
   test("derive Typeclass for a nested union type") {
@@ -24,8 +24,8 @@ class GenericTypeDerivationSuite extends munit.FunSuite {
     given Typeclass[UnionType]                       = UnionDerivation.derive[Typeclass, UnionType]
     val typeclass: Typeclass[GenericType[UnionType]] = summon[Typeclass[GenericType[UnionType]]]
 
-    assertEquals(typeclass.magic(GenericType(42)), "42-complex")
-    assertEquals(typeclass.magic(GenericType("some-string-value")), "some-string-value-complex")
+    assertEquals(typeclass.magic(GenericType(42)), "42-generic")
+    assertEquals(typeclass.magic(GenericType("some-string-value")), "some-string-value-generic")
   }
 
   test("derive Typeclass for a union of Int and GenericType[String]") {
@@ -33,7 +33,7 @@ class GenericTypeDerivationSuite extends munit.FunSuite {
     val typeclass: Typeclass[UnionType] = UnionDerivation.derive[Typeclass, UnionType]
 
     assertEquals(typeclass.magic(42), "42")
-    assertEquals(typeclass.magic(GenericType("some-string-value")), "some-string-value-complex")
+    assertEquals(typeclass.magic(GenericType("some-string-value")), "some-string-value-generic")
   }
 
 }
@@ -49,6 +49,6 @@ object GenericTypeDerivationSuite {
 
   case class GenericType[A: Typeclass](value: A)
   given [A: Typeclass]: Typeclass[GenericType[A]] =
-    a => summon[Typeclass[A]].magic(a.value) + "-complex"
+    a => summon[Typeclass[A]].magic(a.value) + "-generic"
 
 }
