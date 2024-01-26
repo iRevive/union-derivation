@@ -10,7 +10,7 @@ A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.sca
 To use `union-derivation` in an existing SBT project with Scala **3.3.1** or a later version, add the following configuration to your `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.0.4"
+libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.1.0"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
@@ -20,6 +20,7 @@ Versions matrix:
 |:------:|:-------:|:---:|:------------:|:--------:|
 | 3.1.2  |  0.0.3  |  +  |      -       |    -     |
 | 3.2.0+ | 0.0.4+  |  +  |      +       |    -     |
+| 3.3.1+ | 0.1.0+  |  +  |      +       |    +     |
 
 ## Usage example
 
@@ -93,9 +94,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$34674/0x0000007004ff4d80@31408cc2
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$44884/0x0000007004e88d80@60f65413
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@59d428e4
+// userShow: Show[User] = repl.MdocSession$$anon$9@3ae6c4fd
 
 println(unionShow.show(1))
 // Int(1)
@@ -132,7 +133,7 @@ The library works out of the box with [scala-cli](https://scala-cli.virtuslab.or
 
 ```scala
 //> using scala "3.3.1"
-//> using lib "io.github.irevive::union-derivation-core:0.0.4"
+//> using lib "io.github.irevive::union-derivation-core:0.1.0"
 //> using options "-Yretain-trees"
 
 import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
