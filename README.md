@@ -1,7 +1,7 @@
 # union-derivation
 
 [![Continuous Integration](https://github.com/iRevive/union-derivation/actions/workflows/ci.yml/badge.svg)](https://github.com/iRevive/union-derivation/actions/workflows/ci.yml)
-[![union-derivation-core Scala version support](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core/latest-by-scala-version.svg)](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core)
+[![union-derivation-core Scala version support](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core/latest.svg)](https://index.scala-lang.org/irevive/union-derivation/union-derivation-core)
 
 A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.scala-lang.org/scala3/reference/new-types/union-types.html).
 
@@ -93,9 +93,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$31803/0x0000007004b10438@3b56226f
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$34674/0x0000007004ff4d80@31408cc2
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@5ae3a5a5
+// userShow: Show[User] = repl.MdocSession$$anon$9@59d428e4
 
 println(unionShow.show(1))
 // Int(1)
