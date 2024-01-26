@@ -8,6 +8,11 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
   WorkflowStep.Sbt(List("docs/mdoc"), name = Some("Generate documentation"))
 )
 
+ThisBuild / githubWorkflowJavaVersions := Seq(
+  JavaSpec.temurin("11"),
+  JavaSpec.temurin("21")
+)
+
 ThisBuild / githubWorkflowPublish := Seq(
   WorkflowStep.Sbt(
     List("ci-release"),
