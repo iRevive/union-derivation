@@ -7,7 +7,7 @@ A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.sca
 
 ## Getting started
 
-To use `union-derivation` in an existing SBT project with Scala **3.1.2** or a later version, add the following configuration to your `build.sbt`:
+To use `union-derivation` in an existing SBT project with Scala **3.3.1** or a later version, add the following configuration to your `build.sbt`:
 
 ```scala
 libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "@VERSION@"
@@ -45,7 +45,7 @@ object Show extends ShowLowPriority {
     val elemInstances = summonAll[m.MirroredElemTypes]
     inline m match {
       case s: Mirror.SumOf[A]     => showSum(s, elemInstances)
-      case p: Mirror.ProductOf[A] => showProduct(p, elemInstances)
+      case _: Mirror.ProductOf[A] => showProduct(elemInstances)
     }
   }
 
@@ -63,7 +63,7 @@ object Show extends ShowLowPriority {
       def show(a: A): String = showA(a, elems(s.ordinal(a)))
     }
 
-  private def showProduct[A](p: Mirror.ProductOf[A], elems: => List[Show[?]]): Show[A] = 
+  private def showProduct[A](elems: => List[Show[?]]): Show[A] = 
     new Show[A] {
       def show(a: A): String = {
         val product = a.asInstanceOf[Product]
@@ -124,7 +124,7 @@ val instance: Show[Int | String | Long] = { (value: Int | String | Long) =>
 The library works out of the box with [scala-cli](https://scala-cli.virtuslab.org/) too.
 
 ```scala mdoc:reset
-//> using scala "3.2.0"
+//> using scala "3.3.1"
 //> using lib "io.github.irevive::union-derivation-core:@VERSION@"
 //> using options "-Yretain-trees"
 
