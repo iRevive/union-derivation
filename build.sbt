@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.3.1"
+ThisBuild / scalaVersion := "3.3.3"
 
 ThisBuild / githubWorkflowTargetBranches        := Seq("main")
 ThisBuild / githubWorkflowTargetTags           ++= Seq("v*")
@@ -37,7 +37,7 @@ lazy val core = crossProject(JVMPlatform, NativePlatform, JSPlatform)
   .settings(commonSettings)
   .settings(
     name                := "union-derivation-core",
-    libraryDependencies += "org.scalameta" %%% "munit" % "1.0.0-M10" % Test
+    libraryDependencies += "org.scalameta" %%% "munit" % "1.0.0" % Test
   )
 
 lazy val examples = crossProject(JVMPlatform, NativePlatform, JSPlatform)
@@ -56,9 +56,10 @@ lazy val docs = project
   .settings(commonSettings)
   .settings(noPublishSettings)
   .settings(
-    name    := "union-derivation-docs",
-    mdocIn  := baseDirectory.value / "src" / "main" / "mdoc" / "index.md",
-    mdocOut := file("README.md"),
+    name          := "union-derivation-docs",
+    scalacOptions -= "-Xfatal-warnings",
+    mdocIn        := baseDirectory.value / "src" / "main" / "mdoc" / "index.md",
+    mdocOut       := file("README.md"),
     mdocVariables := Map(
       "VERSION" -> version.value.replaceFirst("\\+.*", "")
     )
