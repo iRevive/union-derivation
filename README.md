@@ -94,9 +94,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$44884/0x0000007004e88d80@60f65413
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp$$Lambda$16196/0x00000070037ccd80@4475cd21
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$9@3ae6c4fd
+// userShow: Show[User] = repl.MdocSession$$anon$9@5e969cb4
 
 println(unionShow.show(1))
 // Int(1)
