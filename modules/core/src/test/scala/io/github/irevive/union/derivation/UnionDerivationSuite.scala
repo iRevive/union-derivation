@@ -214,4 +214,53 @@ class UnionDerivationSuite extends munit.FunSuite {
     assertEquals(unionTypeGiven.multipleParams("?", 42, "@"), "?=>42=>@")
   }
 
+  test("derive an instance of a typeclass with an extension method") {
+    trait Extension[A] {
+      extension (a: A) def show: String
+    }
+
+    given Extension[Int]    = a => a.toString
+    given Extension[String] = a => a.toString
+
+    type UnionType = Int | String
+    given unionTypeGiven: Extension[UnionType] = UnionDerivation.derive[Extension, UnionType]
+
+    assertEquals((42: UnionType).show, "42")
+    assertEquals(("42": UnionType).show, "42")
+  }
+
+  test("derive an instance of a typeclass with polymorphic type in the result position") {
+    trait Poly[A] {
+      def magic(a: A): A
+    }
+
+    given Poly[Int]    = a => a
+    given Poly[String] = a => a
+
+    type UnionType = Int | String
+    given unionTypeGiven: Poly[UnionType] = UnionDerivation.derive[Poly, UnionType]
+
+    assertEquals(unionTypeGiven.magic(42), 42)
+    assertEquals(unionTypeGiven.magic("42"), "42")
+  }
+
+  test("derive an instance of a typeclass with function type in the result position") {
+    trait Func[A] {
+      def magic(a: A): Int => String
+    }
+
+    given Func[Int] with {
+      def magic(a: Int): Int => String = (x: Int) => s"a->$a;x->$x"
+    }
+    given Func[String] with {
+      def magic(a: String): Int => String = (x: Int) => s"a=>$a;x=>$x"
+    }
+
+    type UnionType = Int | String
+    given unionTypeGiven: Func[UnionType] = UnionDerivation.derive[Func, UnionType]
+
+    assertEquals(unionTypeGiven.magic(42)(1), "a->42;x->1")
+    assertEquals(unionTypeGiven.magic("42")(1), "a=>42;x=>1")
+  }
+
 }

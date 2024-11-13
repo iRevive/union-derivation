@@ -25,16 +25,17 @@ object UnionDerivation {
           val abstractMethod = findAbstractMethod
           val collectedTypes = collectTypes(o)
           val params         = collectParams(abstractMethod, paramType.tpe)
+          val resultType     = detectResultType[A](abstractMethod)
 
           val lambdaType = MethodType(params.map(_.name))(
             _ => params.map(p => if (p.isPoly) tpe else p.typeRepr),
-            _ => abstractMethod.returnTpt.tpe
+            _ => resultType
           )
 
           val lambda = Lambda(
             Symbol.spliceOwner,
             lambdaType,
-            (_, args) => body(collectedTypes, params, args, abstractMethod.name)
+            (_, args) => body[A](collectedTypes, params, args, abstractMethod.name)
           )
 
           // transform lambda to an instance of the typeclass
@@ -124,7 +125,18 @@ object UnionDerivation {
           )
       }
 
-    // required exactly one type param
+    /**
+      * Detects concrete result type of the abstract method.
+      */
+    private def detectResultType[A: Type](method: DefDef)(using Diagnostic): TypeRepr =
+      TypeRepr.of[F[A]].memberType(method.symbol) match {
+        case mt: MethodType => mt.resType
+        case _              => errorAndAbort(s"cannot detect result type of the '${method.name}' function.")
+      }
+
+    /**
+      * Exactly one type param is required.
+      */
     private def findParamType(using Diagnostic): TypeTree =
       TypeRepr.of[F].typeSymbol.declaredTypes match {
         case head :: Nil =>
@@ -183,7 +195,7 @@ object UnionDerivation {
       * @param method
       *   the name of the typeclass method to apply
       * @tparam A
-      *   the input type
+      *   the input union type
       */
     private def body[A: Type](
         knownTypes: List[TypeRepr],
