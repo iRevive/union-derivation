@@ -24,7 +24,10 @@ class ShowDerivationSuite extends munit.FunSuite {
   test("fail derivation for a non-union type") {
     val expected =
       """
-        |error: Cannot derive a typeclass for the scala.Int. Only Union type is supported
+        |error:
+        |UnionDerivation cannot derive an instance of trait Show for the type `scala.Int`.
+        |Reason: only Union type is supported.
+        |
         |    assertNoDiff(compileErrors("Show.deriveUnion[Int]"), expected)
         |                             ^
         |
@@ -36,7 +39,10 @@ class ShowDerivationSuite extends munit.FunSuite {
   test("fail derivation if an instance of a typeclass is missing for a member type") {
     val expected =
       """
-        |error: no implicit values were found that match type io.github.irevive.union.derivation.ShowDerivationSuite.Show[Double]
+        |error:
+        |UnionDerivation cannot derive an instance of trait Show for the type `scala.Int | scala.Predef.String | scala.Double`.
+        |Reason: no implicit values were found that match type io.github.irevive.union.derivation.ShowDerivationSuite.Show[Double]
+        |
         |    assertNoDiff(compileErrors("Show.deriveUnion[Int | String | Double]"), expected)
         |                             ^
         |""".stripMargin
