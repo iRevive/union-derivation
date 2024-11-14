@@ -19,7 +19,7 @@ class IsUnionSuite extends munit.FunSuite {
         |
         |    io.github.irevive.union.derivation.IsUnion.derived[Int]
         |
-        |But given instance derived in object IsUnion does not match type io.github.irevive.union.derivation.IsUnion[Int].
+        |But macro expansion was stopped.
         |summon[IsUnion[Int]]
         |                   ^
         |""".stripMargin
