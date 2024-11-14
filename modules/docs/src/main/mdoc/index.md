@@ -5,13 +5,40 @@
 
 A micro-library to derive a typeclass for Scala 3 [Union types](https://docs.scala-lang.org/scala3/reference/new-types/union-types.html).
 
+<!-- TOC -->
+* [Getting started](#getting-started)
+* [How it works](#how-it-works)
+* [Usage example](#usage-example)
+  * [1. Derivation of a typeclass for a union type](#1-derivation-of-a-typeclass-for-a-union-type)
+  * [2. Derivation of a typeclass with an extension method](#2-derivation-of-a-typeclass-with-an-extension-method)
+  * [3. Full typeclass derivation](#3-full-typeclass-derivation)
+    * [3.1. Typeclass definition](#31-typeclass-definition)
+    * [3.2. Usage](#32-usage)
+    * [3.3. Automated derivation via `derives`](#33-automated-derivation-via-derives)
+* [Unsupported cases](#unsupported-cases)
+  * [A typeclass without a polymorphic parameter](#a-typeclass-without-a-polymorphic-parameter)
+  * [A typeclass with multiple type parameters](#a-typeclass-with-multiple-type-parameters)
+  * [A typeclass with multiple polymorphic parameters of the same type](#a-typeclass-with-multiple-polymorphic-parameters-of-the-same-type)
+  * [A typeclass with a curried function](#a-typeclass-with-a-curried-function)
+* [scala-cli](#scala-cli)
+<!-- TOC -->
+
 ## Getting started
 
-To use `union-derivation` in an existing SBT project with Scala **3.3.1** or a later version, add the following configuration to your `build.sbt`:
+To use `union-derivation` in an existing SBT project with Scala **3.3.1** or a later version. 
+
+Configure you project via `build.sbt`:
 
 ```scala
 libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "@VERSION@"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
+```
+
+Or via [scala-cli](https://scala-cli.virtuslab.org/) directives:
+```scala
+//> using scala "@SCALA_VERSION@"
+//> using lib "io.github.irevive::union-derivation-core:@VERSION@"
+//> using options "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
 Versions matrix:
@@ -22,27 +49,97 @@ Versions matrix:
 | 3.2.0+ | 0.0.4+  |  +  |      +       |    -     |
 | 3.3.1+ | 0.1.0+  |  +  |      +       |    +     |
 
+## How it works
+
+The library generates a set of if-else statements for the known types of the union.
+
+The simplified version of the generated code:
+```scala
+val instance: Show[Int | String | Long] = UnionDerivation.derive[Show, Int | String | Long]
+
+// expands into
+val instance: Show[Int | String | Long] = { (value: Int | String | Long) =>
+  if (value.isInstanceOf[Int]) summon[Show[Int]].show(value.asInstanceOf[Int])
+  else if (value.isInstanceOf[String]) summon[Show[String]].show(value.asInstanceOf[String])
+  else if (value.isInstanceOf[Long]) summon[Show[Long]].show(value.asInstanceOf[Long])
+  else sys.error("Impossible")
+}
+```
+
 ## Usage example
 
-### Typeclass definition
+### 1. Derivation of a typeclass for a union type
 
-```scala mdoc:silent
+```scala mdoc:reset
+import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
+
+// A typeclass definition
+trait Show[A] { 
+  def show(value: A): String
+}
+
+// The typeclass instances
+given Show[String] = value => s"str: $value"
+given Show[Int]    = value => s"int: $value"
+
+// Implicit derivation that works only for the union types
+inline given derivedUnion[A](using IsUnion[A]): Show[A] = 
+  UnionDerivation.derive[Show, A]
+
+println(summon[Show[String | Int]].show(1))
+println(summon[Show[String | Int]].show("1"))
+```
+
+### 2. Derivation of a typeclass with an extension method
+
+A derivation works for a typeclass with a single extension method too:
+```scala mdoc:reset
+import io.github.irevive.union.derivation.UnionDerivation
+
+// A typeclass definition
+trait Show[A] {
+  extension(a: A) def show: String
+}
+
+// The typeclass instances
+given Show[String] = value => s"str: $value"
+given Show[Int]    = value => s"int: $value"
+
+// Explicit (manual) derivation for the specific union type
+type UnionType = String | Int
+given Show[UnionType] = UnionDerivation.derive[Show, UnionType]
+
+println((1: UnionType).show)
+println(("1": UnionType).show)
+```
+
+### 3. Full typeclass derivation
+
+#### 3.1. Typeclass definition
+
+```scala mdoc:silent:reset
 import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
 
 import scala.compiletime.{erasedValue, summonInline}
 import scala.deriving.*
 
-trait Show[A] {
+// A typeclass definition
+trait Show[A] { 
   def show(a: A): String
 }
 
 object Show extends ShowLowPriority {
+  
+  def apply[A](using ev: Show[A]): Show[A] = ev
 
+  // The typeclass instances
   given Show[Int]    = v => s"Int($v)"
   given Show[Long]   = v => s"Long($v)"
   given Show[String] = v => s"String($v)"
 
-  inline given derived[A](using m: Mirror.Of[A]): Show[A] = { // (1)
+  // The derivation mechanism
+  // Checkout https://docs.scala-lang.org/scala3/reference/contextual/derivation.html for more details
+  inline given derived[A](using m: Mirror.Of[A]): Show[A] = {
     val elemInstances = summonAll[m.MirroredElemTypes]
     inline m match {
       case s: Mirror.SumOf[A]     => showSum(s, elemInstances)
@@ -79,15 +176,14 @@ object Show extends ShowLowPriority {
 
 }
 
+// Since the 'derivedUnion' is defined in the trait, it's a low-priority implicit
 trait ShowLowPriority {
-  inline given derivedUnion[A](using IsUnion[A]): Show[A] = UnionDerivation.derive[Show, A] // (2)
+  // Implicit derivation that works only for the union types
+  inline given derivedUnion[A](using IsUnion[A]): Show[A] = UnionDerivation.derive[Show, A]
 }
 ```
 
-1) The derivation mechanism. Checkout [Scala 3 docs](https://docs.scala-lang.org/scala3/reference/contextual/derivation.html) for more details.
-2) `derivedUnion` has `IsUnion` constraint, therefore the method can be applied only to Union types. 
-
-### Usage
+#### 3.2. Usage
 
 ```scala mdoc
 type UnionType = Int | Long | String
@@ -103,29 +199,86 @@ println(userShow.show(User("Pablo", 22, 12L)))
 println(userShow.show(User("Pablo", 33, 1)))
 ```
 
-## Generated code
+#### 3.3. Automated derivation via `derives`
 
-The library creates a set of if-else statements for the known types of the union.
+```scala mdoc
+final case class Author(name: String, age: Long, flags: Long | String) derives Show
+println(Show[Author].show(Author("Pablo", 22, 12L)))
+println(Show[Author].show(Author("Pablo", 33, "string flag")))
+```
 
-The simplified version of the generated code:
+## Unsupported cases
+
+### A typeclass without a polymorphic parameter
+
+A typeclass function without parameters:
 ```scala
-val instance: Show[Int | String | Long] = UnionDerivation.derive[Show, Int | String | Long]
-
-// expands into
-val instance: Show[Int | String | Long] = { (value: Int | String | Long) =>
-  if (value.isInstanceOf[Int]) summon[Show[Int]].show(value)
-  else if (value.isInstanceOf[String]) summon[Show[String]].show(value)
-  else if (value.isInstanceOf[Long]) summon[Show[Long]].show(value)
-  else sys.error("Impossible")
+trait Typeclass[A] {
+  def magic: String
+  //       ^
+  // Polymorphic parameter of type A is missing
 }
 ```
+
+A typeclass function without polymorphic parameter:
+```scala
+trait Typeclass[A] {
+  def magic(a: Int): String
+  //              ^
+  // Polymorphic parameter of type A is missing
+}
+```
+
+A polymorphic parameter is mandatory to perform the type matching in runtime.
+
+### A typeclass with multiple type parameters
+
+```scala
+trait Typeclass[A, B] {
+  def magic(a: A, b: B): String
+}
+```
+
+However, you can overcome this limitation by using 
+[polymorphic function types](https://docs.scala-lang.org/scala3/reference/new-types/polymorphic-function-types.html):
+```scala
+trait Typeclass[A] {
+  def magic(a: A): [B] => B => String
+}
+```
+
+### A typeclass with multiple polymorphic parameters of the same type
+
+```scala
+trait Typeclass[A] {
+  def magic(a1: A, b: Int, a2: A): String
+}
+```
+
+A polymorphic parameter of type `A` appears in two positions. A macro cannot properly detect which type to use.
+
+### A typeclass with a curried function
+
+```scala
+trait Typeclass[A] {
+  def magic(a: A)(b: String): A
+}
+```
+
+However, you can overcome this limitation by moving currying to the result type definition:
+```scala
+trait Typeclass[A] {
+  def magic(a: A): String => A
+}
+```
+
 
 ## scala-cli
 
 The library works out of the box with [scala-cli](https://scala-cli.virtuslab.org/) too.
 
 ```scala mdoc:reset
-//> using scala "3.3.1"
+//> using scala "@SCALA_VERSION@"
 //> using lib "io.github.irevive::union-derivation-core:@VERSION@"
 //> using options "-Yretain-trees"
 
