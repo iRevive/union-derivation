@@ -30,24 +30,25 @@ To use `union-derivation` in an existing SBT project with Scala **3.3.1** or a l
 Configure you project via `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.1.0"
+libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.2.0"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
 Or via [scala-cli](https://scala-cli.virtuslab.org/) directives:
 ```scala
-//> using scala "3.3.3"
-//> using lib "io.github.irevive::union-derivation-core:0.1.0"
+//> using scala "3.3.4"
+//> using lib "io.github.irevive::union-derivation-core:0.2.0"
 //> using options "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
 Versions matrix:
 
-| Scala  | Library | JVM | Scala Native | Scala.js |
-|:------:|:-------:|:---:|:------------:|:--------:|
-| 3.1.2  |  0.0.3  |  +  |      -       |    -     |
-| 3.2.0+ | 0.0.4+  |  +  |      +       |    -     |
-| 3.3.1+ | 0.1.0+  |  +  |      +       |    +     |
+| Scala  | Library | JVM | Scala Native (0.4) | Scala Native (0.5.x) | Scala.js |
+|:------:|:-------:|:---:|:------------------:|:---------------------:|:--------:|
+| 3.1.2  |  0.0.3  |  +  |         -          |           -           |    -     |
+| 3.2.0+ | 0.0.4+  |  +  |         +          |           +           |    -     |
+| 3.3.x  |  0.1.x  |  +  |         +          |           -           |    +     |
+| 3.3.x  |  0.2.x  |  +  |         -          |           +           |    +     |
 
 ## How it works
 
@@ -194,9 +195,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp6$$Lambda/0x000000c0038b3340@24832123
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp6$$Lambda/0x0000008003871340@75308f03
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$18@231cd1af
+// userShow: Show[User] = repl.MdocSession$$anon$18@972b92
 
 println(unionShow.show(1))
 // Int(1)
@@ -291,8 +292,8 @@ trait Typeclass[A] {
 The library works out of the box with [scala-cli](https://scala-cli.virtuslab.org/) too.
 
 ```scala
-//> using scala "3.3.3"
-//> using lib "io.github.irevive::union-derivation-core:0.1.0"
+//> using scala "3.3.4"
+//> using lib "io.github.irevive::union-derivation-core:0.2.0"
 //> using options "-Yretain-trees"
 
 import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
