@@ -43,11 +43,12 @@ Or via [scala-cli](https://scala-cli.virtuslab.org/) directives:
 
 Versions matrix:
 
-| Scala  | Library | JVM | Scala Native | Scala.js |
-|:------:|:-------:|:---:|:------------:|:--------:|
-| 3.1.2  |  0.0.3  |  +  |      -       |    -     |
-| 3.2.0+ | 0.0.4+  |  +  |      +       |    -     |
-| 3.3.1+ | 0.1.0+  |  +  |      +       |    +     |
+| Scala  | Library | JVM | Scala Native (0.4) | Scala Native (0.5.x) | Scala.js |
+|:------:|:-------:|:---:|:------------------:|:---------------------:|:--------:|
+| 3.1.2  |  0.0.3  |  +  |         -          |           -           |    -     |
+| 3.2.0+ | 0.0.4+  |  +  |         +          |           +           |    -     |
+| 3.3.x  |  0.1.x  |  +  |         +          |           -           |    +     |
+| 3.3.x  |  0.2.x  |  +  |         -          |           +           |    +     |
 
 ## How it works
 
