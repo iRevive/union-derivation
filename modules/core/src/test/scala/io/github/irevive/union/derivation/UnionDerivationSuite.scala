@@ -263,4 +263,25 @@ class UnionDerivationSuite extends munit.FunSuite {
     assertEquals(unionTypeGiven.magic("42")(1), "a=>42;x=>1")
   }
 
+  test("derive an instance of a type class with polymorphic function type in the result position") {
+    trait PolyFunctionType[A] {
+      def magic(a: A): [B] => B => String
+    }
+
+    given PolyFunctionType[Int] with {
+      def magic(a: Int): [B] => B => String =
+        [B] => (b: B) => a.toString + "->" + b.toString
+    }
+    given PolyFunctionType[String] with {
+      def magic(a: String): [B] => B => String =
+        [B] => (b: B) => a + "=>" + b.toString
+    }
+
+    type UnionType = Int | String
+    given unionTypeGiven: PolyFunctionType[UnionType] = UnionDerivation.derive[PolyFunctionType, UnionType]
+
+    assertEquals(unionTypeGiven.magic(42).apply(1L), "42->1")
+    assertEquals(unionTypeGiven.magic("42").apply(1L), "42=>1")
+  }
+
 }

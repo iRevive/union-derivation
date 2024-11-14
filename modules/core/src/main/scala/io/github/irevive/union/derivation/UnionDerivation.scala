@@ -143,10 +143,10 @@ object UnionDerivation {
           TypeIdent(head)
 
         case Nil =>
-          errorAndAbort("The typeclass doesn't have a type parameter")
+          errorAndAbort("the typeclass doesn't have a type parameter.")
 
         case _ =>
-          errorAndAbort("The typeclass has multiple type parameters")
+          errorAndAbort("the typeclass has multiple type parameters.")
       }
 
     /**

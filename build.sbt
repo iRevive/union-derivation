@@ -61,7 +61,8 @@ lazy val docs = project
     mdocIn        := baseDirectory.value / "src" / "main" / "mdoc" / "index.md",
     mdocOut       := file("README.md"),
     mdocVariables := Map(
-      "VERSION" -> version.value.replaceFirst("\\+.*", "")
+      "VERSION"       -> version.value.replaceFirst("\\+.*", ""),
+      "SCALA_VERSION" -> scalaVersion.value
     )
   )
   .dependsOn(core.jvm)
