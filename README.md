@@ -30,14 +30,14 @@ To use `union-derivation` in an existing SBT project with Scala **3.3.1** or a l
 Configure you project via `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.2.0"
+libraryDependencies += "io.github.irevive" %% "union-derivation-core" % "0.2.1"
 scalacOptions += "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
 Or via [scala-cli](https://scala-cli.virtuslab.org/) directives:
 ```scala
 //> using scala "3.3.4"
-//> using lib "io.github.irevive::union-derivation-core:0.2.0"
+//> using lib "io.github.irevive::union-derivation-core:0.2.1"
 //> using options "-Yretain-trees" // important for the detection of an abstract method in a trait
 ```
 
@@ -195,9 +195,9 @@ type UnionType = Int | Long | String
 final case class User(name: String, age: Long, flags: UnionType)
 
 val unionShow: Show[UnionType] = summon[Show[UnionType]]
-// unionShow: Show[UnionType] = repl.MdocSession$MdocApp6$$Lambda/0x0000008003871340@75308f03
+// unionShow: Show[UnionType] = repl.MdocSession$MdocApp6$$Lambda/0x000000d802d83340@12716017
 val userShow: Show[User] = summon[Show[User]]
-// userShow: Show[User] = repl.MdocSession$$anon$18@972b92
+// userShow: Show[User] = repl.MdocSession$$anon$18@1afd4656
 
 println(unionShow.show(1))
 // Int(1)
@@ -293,7 +293,7 @@ The library works out of the box with [scala-cli](https://scala-cli.virtuslab.or
 
 ```scala
 //> using scala "3.3.4"
-//> using lib "io.github.irevive::union-derivation-core:0.2.0"
+//> using lib "io.github.irevive::union-derivation-core:0.2.1"
 //> using options "-Yretain-trees"
 
 import io.github.irevive.union.derivation.{IsUnion, UnionDerivation}
