@@ -1,5 +1,6 @@
 package io.github.irevive.union.derivation
 
+import scala.language.strictEquality
 import scala.quoted.*
 
 object UnionDerivation {
@@ -63,7 +64,7 @@ object UnionDerivation {
       method.paramss match {
         case TermParamClause(params) :: Nil =>
           val all = params.map { param =>
-            MethodParam(param.name, param.tpt.tpe, param.tpt.tpe == paramType)
+            MethodParam(param.name, param.tpt.tpe, param.tpt.tpe =:= paramType)
           }
 
           val typed = all.filter(_.isPoly)
