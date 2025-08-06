@@ -136,7 +136,7 @@ jobs:
         run: sbt +update
 
       - name: Download target directories (3)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: target-${{ matrix.os }}-${{ matrix.java }}-3
 
