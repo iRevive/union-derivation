@@ -37,7 +37,7 @@ lazy val core = crossProject(JVMPlatform, NativePlatform, JSPlatform)
   .settings(commonSettings)
   .settings(
     name                := "union-derivation-core",
-    libraryDependencies += "org.scalameta" %%% "munit" % "1.1.1" % Test
+    libraryDependencies += "org.scalameta" %%% "munit" % "1.2.0" % Test
   )
 
 lazy val examples = crossProject(JVMPlatform, NativePlatform, JSPlatform)
