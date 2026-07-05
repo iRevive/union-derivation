@@ -47,7 +47,7 @@ object GenericTypeDerivationSuite {
   given Typeclass[Int]    = _.toString
   given Typeclass[String] = identity(_)
 
-  case class GenericType[A: Typeclass](value: A)
+  case class GenericType[A](value: A)
   given [A: Typeclass]: Typeclass[GenericType[A]] =
     a => summon[Typeclass[A]].magic(a.value) + "-generic"
 
