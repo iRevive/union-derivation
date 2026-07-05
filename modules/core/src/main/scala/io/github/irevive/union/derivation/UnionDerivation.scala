@@ -43,11 +43,13 @@ object UnionDerivation {
           val instanceTree = lambda match {
             case Block(body, Closure(method, _)) =>
               Block(body, Closure(method, Some(TypeRepr.of[F].appliedTo(tpe))))
+            case other =>
+              errorAndAbort(s"unexpected lambda tree: ${other.show}")
           }
 
           instanceTree.asExprOf[F[A]]
 
-        case other =>
+        case _ =>
           errorAndAbort("only Union type is supported.")
       }
     }
@@ -218,7 +220,7 @@ object UnionDerivation {
         val tcl        = lookupImplicit(tpe)
 
         val args: List[Term] = params.zip(lambdaArgs).map {
-          case (param, arg) if param.isPoly =>
+          case (param, _) if param.isPoly =>
             Select.unique(selector, "asInstanceOf").appliedToType(tpe)
 
           case (_, arg) =>
@@ -257,6 +259,7 @@ object UnionDerivation {
       Implicits.search(tclTpe) match {
         case success: ImplicitSearchSuccess => success.tree
         case failure: ImplicitSearchFailure => errorAndAbort(failure.explanation)
+        case other                          => errorAndAbort(s"unexpected implicit search result: $other")
       }
     }
 
